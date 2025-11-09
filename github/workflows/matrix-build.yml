@@ -1,0 +1,29 @@
+name: Multi-Platform Matrix Build
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [14, 16, 18]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: matrix-c5b1d88
+        run: echo "Building for version ${{ matrix.version }}"
+      
+      - name: Generate build artifact
+        run: |
+          echo "Build output for version ${{ matrix.version }}" > output-v${{ matrix.version }}.txt
+          echo "Timestamp: $(date)" >> output-v${{ matrix.version }}.txt
+          echo "Matrix version: ${{ matrix.version }}" >> output-v${{ matrix.version }}.txt
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-c5b1d88-v${{ matrix.version }}
+          path: output-v${{ matrix.version }}.txt
